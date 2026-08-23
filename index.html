@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CallCatch — We catch the customers your website loses</title>
+<meta name="description" content="CallCatch answers your website visitors' questions from your own site content, never invents a price, and turns after-hours visitors into leads on your phone. Built in Grand Rapids for HVAC, plumbing, and electrical companies.">
+<!--
+  CallCatch landing page. Static — served at / by express.static, deployable
+  anywhere. The widget in the corner is the REAL widget.js with the network
+  stubbed (same trick as preview.html): it demos as "Summit Heating & Air",
+  a fictional company, so visitors can watch it refuse to invent a price.
+
+  TODO before this goes live on callcatch.com:
+    - Replace anthony.smith1760@gmail.com if using a different address
+-->
+<style>
+  *{box-sizing:border-box;margin:0}
+  :root{--navy:#12365c;--navy-deep:#0c2440;--amber:#f5a623;--ink:#1b2430;--mut:#5a6577;--line:#e4e8ee;--bg:#f7f9fc}
+  body{font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:#fff}
+  .container{max-width:1020px;margin:0 auto;padding:0 24px}
+
+  header{padding:18px 0}
+  header .container{display:flex;justify-content:space-between;align-items:center}
+  .logo{font-weight:800;font-size:21px;letter-spacing:-.4px;color:var(--navy)}
+  .logo span{color:var(--amber)}
+  .nav-cta{font-size:15px;font-weight:700;color:var(--navy);text-decoration:none;border:2px solid var(--navy);border-radius:8px;padding:8px 16px}
+
+  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;padding:76px 0 84px;text-align:center}
+  .hero h1{font-size:clamp(30px,5vw,46px);line-height:1.15;letter-spacing:-1px;max-width:760px;margin:0 auto 18px}
+  .hero .sub{font-size:19px;color:#c7d5e6;max-width:640px;margin:0 auto 30px}
+  .btn{display:inline-block;background:var(--amber);color:#231a06;font-weight:800;font-size:17px;padding:15px 30px;border-radius:9px;text-decoration:none}
+  .hero .try{margin-top:22px;font-size:15px;color:#9fb4cc}
+  .hero .try b{color:#fff}
+
+  section{padding:64px 0}
+  section.alt{background:var(--bg)}
+  h2{font-size:28px;letter-spacing:-.5px;margin-bottom:10px}
+  .lead{color:var(--mut);max-width:640px;margin-bottom:34px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px}
+  .alt .card{box-shadow:0 1px 3px rgba(16,32,54,.06)}
+  .card .tick{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .card h3{font-size:18px;margin-bottom:8px}
+  .card p{font-size:15.5px;color:var(--mut)}
+  .card .q{display:block;margin-top:14px;font-size:13.5px;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 11px;color:var(--navy);font-weight:600}
+
+  .steps{counter-reset:step}
+  .steps .card{position:relative;padding-top:30px}
+  .steps .card::before{counter-increment:step;content:counter(step);position:absolute;top:-16px;left:22px;width:34px;height:34px;border-radius:50%;background:var(--amber);color:#231a06;font-weight:800;display:flex;align-items:center;justify-content:center;border:3px solid #fff}
+
+  .demo-note{display:flex;gap:14px;align-items:flex-start;background:#fff8e8;border:1px solid #efd9a2;border-radius:12px;padding:18px 20px;margin-top:34px;font-size:15.5px}
+  .demo-note .arrow{font-size:22px;line-height:1.2}
+
+  .closer{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;text-align:center}
+  .closer h2{color:#fff}
+  .closer p{color:#c7d5e6;max-width:560px;margin:0 auto 28px}
+
+  footer{padding:34px 0;font-size:14.5px;color:var(--mut);text-align:center}
+  footer a{color:var(--navy)}
+  @media (max-width:640px){ section{padding:44px 0} .hero{padding:56px 0 64px} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">Call<span>Catch</span></div>
+    <a class="nav-cta" href="tel:+16163191728">Book a 10-min demo</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="container">
+    <h1>We catch the customers your&nbsp;website loses.</h1>
+    <p class="sub">Half the people who visit your site do it after hours — and leave without calling. CallCatch answers their questions right on your website and turns them into phone numbers on your phone by morning.</p>
+    <a class="btn" href="tel:+16163191728">Book a 10-minute demo</a>
+    <p class="try">Or try it yourself right now — <b>the chat button in the corner is live.</b> Ask it what a furnace costs.</p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <h2>It only says what your website says. That's the whole point.</h2>
+    <p class="lead">Every answer comes from your own pages and the facts you approve — nothing else. Try all three on the widget in the corner (it's answering for Summit Heating &amp; Air, a demo company):</p>
+    <div class="grid">
+      <div class="card">
+        <div class="tick">✓</div>
+        <h3>Answers from your site</h3>
+        <p>Services, brands, service area, financing — if it's on your website, the assistant knows it and answers in a couple of sentences, any hour of the night.</p>
+        <span class="q">"do you install tankless water heaters?"</span>
+      </div>
+      <div class="card">
+        <div class="tick">✓</div>
+        <h3>Never invents a price</h3>
+        <p>Ask it what a job costs and it won't guess — it says pricing depends on the job and offers a real quote. No made-up numbers reaching your customers. Ever.</p>
+        <span class="q">"how much for a furnace tune-up?"</span>
+      </div>
+      <div class="card">
+        <div class="tick">✓</div>
+        <h3>Turns questions into leads</h3>
+        <p>Anything it can't answer becomes a captured name and number — with the customer's request in their own words — emailed to you the second it happens.</p>
+        <span class="q">"can someone call me? 616-555-0134"</span>
+      </div>
+    </div>
+    <div class="demo-note">
+      <div class="arrow">↘</div>
+      <div><b>The demo in the corner is the real product.</b> The second card is the one to test — every other chatbot you've seen will happily make up a price. This one is built so it can't.</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>Live on your site in a day. No work on your end.</h2>
+    <p class="lead">No forms to fill out, no content to write, no new software to learn.</p>
+    <div class="grid steps">
+      <div class="card">
+        <h3>We read your website</h3>
+        <p>CallCatch learns your services, your service area, and your voice from the pages you already have — plus any facts you want to add, like hours or emergency policy.</p>
+      </div>
+      <div class="card">
+        <h3>One line goes on your site</h3>
+        <p>Your web person pastes a single line of code — or we do it with them on a ten-minute call. It matches your brand colors and can't break your site.</p>
+      </div>
+      <div class="card">
+        <h3>Leads hit your phone</h3>
+        <p>Every captured lead is emailed to you instantly — phone number first, the customer's own words underneath, emergencies flagged. You call back before your competitor wakes up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closer">
+  <div class="container">
+    <h2>Ten minutes. Your actual website. Live.</h2>
+    <p>Before we ever talk, we build CallCatch on your real site so you can see it answering questions about your business. If it doesn't impress you, you'll never hear from us again. Simple monthly price, no contract.</p>
+    <a class="btn" href="tel:+16163191728">Call or text (616) 319-1728</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    CallCatch · Grand Rapids, MI · <a href="mailto:anthony.smith1760@gmail.com">anthony.smith1760@gmail.com</a><br>
+    Built for HVAC, plumbing, and electrical companies in West Michigan.
+  </div>
+</footer>
+
+<script>
+// Stub the network so the real widget runs with no backend, answering as
+// "Summit Heating & Air" — a fictional demo company. Same trick as preview.html.
+(function () {
+  var canned = [
+    { match: /tankless|water heater/i,
+      reply: "Yes — Summit installs and services both tank and tankless water heaters, including descaling and warranty work on most major brands. Want me to have someone call you with a quote?" },
+    { match: /price|cost|how much|quote|estimate|tune.?up|\$/i,
+      reply: "I don't have exact pricing listed — it depends on the unit and what's going on with it. I can have someone call you with a real number. What's the best number to reach you at?" },
+    { match: /\d{3}[-.\s]?\d{3}[-.\s]?\d{4}|call me|contact me/i,
+      reply: "Got it — someone from Summit will give you a call shortly. And that's the moment CallCatch just earned its keep: on your site, that phone number would be in YOUR inbox right now.", lead: true },
+    { match: /emergency|no heat|leak|flood|smell gas/i,
+      reply: "Please call the emergency line right away — it's answered 24/7. If you smell gas, leave the house and call 911 first. I'll also pass your details along — what's your name and number?" },
+    { match: /hour|open|saturday|weekend/i,
+      reply: "Regular hours are Monday to Friday, 8 to 5, with a 24/7 emergency line. Is there something I can get scheduled for you?" },
+    { match: /callcatch|this widget|how does this work|what is this/i,
+      reply: "I'm a CallCatch assistant, demoing as a fictional heating company. On your website I'd answer from YOUR pages — and everything I can't answer becomes a lead in your inbox. Book a demo and see it on your actual site." }
+  ];
+  var fallback = "Good question — I don't want to guess on that one. I can have someone from the office get back to you. What's the best number to reach you at?";
+
+  var realFetch = window.fetch.bind(window);
+  window.fetch = function (url, opts) {
+    if (String(url).indexOf('/api/chat') === -1) return realFetch(url, opts);
+    var msg = '';
+    try { msg = JSON.parse(opts.body).message || ''; } catch (e) {}
+    var hit = canned.filter(function (c) { return c.match.test(msg); })[0];
+    var body = {
+      conversationId: 'landing-demo',
+      reply: hit ? hit.reply : fallback,
+      grounded: !!hit,
+      sources: hit ? [{ url: 'https://summitheating.example/services', title: 'Services' }] : [],
+      leadCaptured: !!(hit && hit.lead)
+    };
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        resolve({ ok: true, json: function () { return Promise.resolve(body); } });
+      }, 550);
+    });
+  };
+})();
+</script>
+
+<script src="widget.js"
+        data-client="landing-demo"
+        data-api="/stub"
+        data-name="Summit Heating — Ask us anything"
+        data-greeting="Hi! I'm a live CallCatch demo, answering as Summit Heating & Air. Ask me anything — try 'how much for a furnace tune-up?'"
+        data-color="#12365c"></script>
+</body>
+</html>
