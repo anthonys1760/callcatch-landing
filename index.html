@@ -83,7 +83,7 @@
 <section>
   <div class="container">
     <h2>It only says what your website says. That's the whole point.</h2>
-    <p class="lead">Every answer comes from your own pages and the facts you approve — nothing else. Try all three on the widget in the corner (it's answering for Summit Heating &amp; Air, a demo company):</p>
+    <p class="lead">Every answer comes from your own pages and the facts you approve — nothing else. Try all three on the widget in the corner — it answers product questions as CallCatch, and plays "Summit Heating &amp; Air," a fictional company, for these tests:</p>
     <div class="grid">
       <div class="card">
         <div class="tick">✓</div>
@@ -151,21 +151,36 @@
 // Stub the network so the real widget runs with no backend, answering as
 // "Summit Heating & Air" — a fictional demo company. Same trick as preview.html.
 (function () {
+  // Two voices, checked in order:
+  //  1. CallCatch product questions (what visitors to THIS page actually ask)
+  //  2. "Summit Heating & Air" demo-company answers for the three scripted tests
   var canned = [
+    // ---- CallCatch product questions -------------------------------------
+    { match: /who (is|'?s) (this|it) (built |made )?for|industries|what (kind|type)s? of (business|compan)|plumbing compan|electrical compan|hvac compan|roofers?|contractors?/i,
+      reply: "It's built for local service businesses — HVAC, plumbing, electrical, and other trades where a missed call is a missed job. If your customers Google you at 9pm, CallCatch is built for you. Want it on your site? Call or text Anthony at (616) 319-1728." },
+    { match: /read (my|our|the) (web)?site|crawl|learn (my|our|from)|my (own )?(web)?site|scan (my|our)|where.*answers come from/i,
+      reply: "Yes — that's exactly how it works. CallCatch reads the pages your website already has and answers only from what they say, plus any facts you approve (hours, service area). It never guesses. Test that part right now: ask me 'how much for a furnace tune-up?'" },
+    { match: /how (does|do) (it|this|callcatch) work|install|set ?up|get(ting)? started|onboard|wordpress|squarespace|wix|embed|add (it|this) to/i,
+      reply: "Three steps: we read your website, one line of code goes on your site — we handle that with your web person on a ten-minute call — and every captured lead hits your phone instantly. Works on WordPress and just about everything else. Nothing for you to write or maintain." },
+    { match: /what('?s| is| does) (this|it|callcatch)|what do you do|whats this|who are you|about (this|the) (page|site|widget|tool|thing)|this thing/i,
+      reply: "This is CallCatch — a website assistant for local trade businesses. On a client's site I answer visitors' questions using only that business's own website content, and anything I can't answer becomes a lead: a name and phone number in the owner's inbox. Up here I'm in demo mode — ask who it's for, or test me with 'how much for a furnace tune-up?'" },
+    { match: /callcatch.*(cost|price|charge)|(cost|price) of callcatch|monthly|subscription|contract|how much (is it|does it cost|do you charge)/i,
+      reply: "Simple monthly price, no long-term contract — one recovered job typically covers months of it. Anthony quotes the exact number on a ten-minute demo built on your actual website first, so you're never buying blind. Call or text (616) 319-1728." },
+    { match: /are you (a )?(human|real|person)|is this a (bot|robot)|talking to/i,
+      reply: "I'm not a person — I'm the CallCatch assistant, and on a client's site I say so there too. Anyone who wants a human gets handed straight to the owner with their number captured. That's the whole point." },
+    // ---- Summit Heating & Air demo answers -------------------------------
     { match: /tankless|water heater/i,
-      reply: "Yes — Summit installs and services both tank and tankless water heaters, including descaling and warranty work on most major brands. Want me to have someone call you with a quote?" },
+      reply: "(Demo, answering as Summit Heating) Yes — Summit installs and services both tank and tankless water heaters, including descaling and warranty work on most major brands. Want me to have someone call you with a quote?" },
     { match: /price|cost|how much|quote|estimate|tune.?up|\$/i,
-      reply: "I don't have exact pricing listed — it depends on the unit and what's going on with it. I can have someone call you with a real number. What's the best number to reach you at?" },
+      reply: "(Demo, answering as Summit Heating) I don't have exact pricing listed — it depends on the unit and what's going on with it. I can have someone call you with a real number. What's the best number to reach you at?" },
     { match: /\d{3}[-.\s]?\d{3}[-.\s]?\d{4}|call me|contact me/i,
-      reply: "Got it — someone from Summit will give you a call shortly. And that's the moment CallCatch just earned its keep: on your site, that phone number would be in YOUR inbox right now.", lead: true },
+      reply: "(Demo) Got it — someone from Summit would give you a call shortly. And that's CallCatch earning its keep: on your site, that phone number would be in YOUR inbox right now.", lead: true },
     { match: /emergency|no heat|leak|flood|smell gas/i,
-      reply: "Please call the emergency line right away — it's answered 24/7. If you smell gas, leave the house and call 911 first. I'll also pass your details along — what's your name and number?" },
+      reply: "(Demo, answering as Summit Heating) Please call the emergency line right away — it's answered 24/7. If you smell gas, leave the house and call 911 first. I'll also pass your details along — what's your name and number?" },
     { match: /hour|open|saturday|weekend/i,
-      reply: "Regular hours are Monday to Friday, 8 to 5, with a 24/7 emergency line. Is there something I can get scheduled for you?" },
-    { match: /callcatch|this widget|how does this work|what is this/i,
-      reply: "I'm a CallCatch assistant, demoing as a fictional heating company. On your website I'd answer from YOUR pages — and everything I can't answer becomes a lead in your inbox. Book a demo and see it on your actual site." }
+      reply: "(Demo, answering as Summit Heating) Regular hours are Monday to Friday, 8 to 5, with a 24/7 emergency line. Is there something I can get scheduled for you?" }
   ];
-  var fallback = "Good question — I don't want to guess on that one. I can have someone from the office get back to you. What's the best number to reach you at?";
+  var fallback = "Fair question — up here I'm a scripted demo, so I only know a handful of answers. The real CallCatch reads your entire website and answers from that. Try 'how much for a furnace tune-up?' to see the part that matters — or ask Anthony directly: call or text (616) 319-1728.";
 
   var realFetch = window.fetch.bind(window);
   window.fetch = function (url, opts) {
@@ -192,8 +207,8 @@
 <script src="widget.js"
         data-client="landing-demo"
         data-api="/stub"
-        data-name="Summit Heating — Ask us anything"
-        data-greeting="Hi! I'm a live CallCatch demo, answering as Summit Heating & Air. Ask me anything — try 'how much for a furnace tune-up?'"
+        data-name="CallCatch — ask me anything"
+        data-greeting="Hi! Ask me about CallCatch — who it's for, how it works — or test me as a customer would: try 'how much for a furnace tune-up?' and watch me refuse to guess."
         data-color="#12365c"></script>
 </body>
 </html>
