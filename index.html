@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CallCatch — We catch the customers your website loses</title>
 <meta name="description" content="CallCatch answers your website visitors' questions from your own site content, never invents a price, and turns after-hours visitors into leads on your phone. Built in Grand Rapids for HVAC, plumbing, and electrical companies.">
 <!--
@@ -11,111 +11,222 @@
   stubbed (same trick as preview.html): it demos as "Summit Heating & Air",
   a fictional company, so visitors can watch it refuse to invent a price.
 
+  Styled to match rogueriverlabs.dev — same tokens, same Saira type, same
+  section rules. Lime is only ever a background behind --ground text:
+  white on #B8F03A is 1.35:1, --ground on it is 14:1.
+
   TODO before this goes live on callcatch.com:
     - Replace anthony.smith1760@gmail.com if using a different address
 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Saira+Condensed:wght@600;700&family=Saira:wght@400;500&display=swap">
 <style>
-  *{box-sizing:border-box;margin:0}
-  :root{--navy:#12365c;--navy-deep:#0c2440;--amber:#f5a623;--ink:#1b2430;--mut:#5a6577;--line:#e4e8ee;--bg:#f7f9fc}
-  body{font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:#fff}
-  .container{max-width:1020px;margin:0 auto;padding:0 24px}
+  :root{
+    --ground:#0F1412;
+    --panel:#151B18;
+    --line:#26302B;
+    --bone:#E9EEE7;
+    --mist:#9AA69F;
+    --lime:#B8F03A;
+    --lime-dim:#7FA92B;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+  *,*::before,*::after{box-sizing:inherit}
+  body{
+    margin:0;background:var(--ground);color:var(--bone);
+    font-family:'Saira',system-ui,sans-serif;font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--lime)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--lime);outline-offset:4px}
+  .wrap{width:min(1100px,100% - 48px);margin-inline:auto}
 
-  header{padding:18px 0}
-  header .container{display:flex;justify-content:space-between;align-items:center}
-  .logo{font-weight:800;font-size:21px;letter-spacing:-.4px;color:var(--navy)}
-  .logo span{color:var(--amber)}
-  .nav-cta{font-size:15px;font-weight:700;color:var(--navy);text-decoration:none;border:2px solid var(--navy);border-radius:8px;padding:8px 16px}
+  /* nav */
+  /* wrap only when it must — below ~360px the CTA drops to its own line
+     instead of pushing the page into horizontal scroll */
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0;gap:20px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--bone)}
+  .brand svg{width:44px;height:44px;flex:none}
+  .brand .word{font-family:'Saira Stencil One',Impact,sans-serif;font-size:22px;letter-spacing:2px;line-height:1}
+  .brand .word em{font-style:normal;color:var(--lime)}
+  .nav-links{display:flex;gap:28px;margin-left:auto}
+  .nav-links a{color:var(--mist);text-decoration:none;font-size:15px}
+  .nav-links a:hover{color:var(--bone)}
+  @media (max-width:860px){
+    .nav-links{display:none}
+    /* Without nowrap this CTA breaks onto three lines at phone width; with it,
+       the wordmark + CTA overrun 375px, so the brand shrinks to make room. */
+    .nav{gap:12px}
+    .nav .btn{white-space:nowrap;font-size:15px;padding:11px 16px}
+    .brand svg{width:36px;height:36px}
+    .brand .word{font-size:17px;letter-spacing:1px}
+  }
 
-  .hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;padding:76px 0 84px;text-align:center}
-  .hero h1{font-size:clamp(30px,5vw,46px);line-height:1.15;letter-spacing:-1px;max-width:760px;margin:0 auto 18px}
-  .hero .sub{font-size:19px;color:#c7d5e6;max-width:640px;margin:0 auto 30px}
-  .btn{display:inline-block;background:var(--amber);color:#231a06;font-weight:800;font-size:17px;padding:15px 30px;border-radius:9px;text-decoration:none}
-  .hero .try{margin-top:22px;font-size:15px;color:#9fb4cc}
-  .hero .try b{color:#fff}
+  /* buttons */
+  .actions{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:14px 26px;border-radius:6px;text-decoration:none;
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:600;font-size:18px;letter-spacing:.5px;
+  }
+  .btn-lime{background:var(--lime);color:var(--ground)}
+  .btn-lime:hover{background:#C9F75A}
+  .btn-ghost{color:var(--bone);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--mist)}
 
-  section{padding:64px 0}
-  section.alt{background:var(--bg)}
-  h2{font-size:28px;letter-spacing:-.5px;margin-bottom:10px}
-  .lead{color:var(--mut);max-width:640px;margin-bottom:34px}
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center;padding:56px 0 96px;border-top:0}
+  .hero h1{
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:700;
+    /* Capped below the company site's 112px: these lines are longer than
+       "Build it. / Break it." and overflow the 1.2fr column above ~86px. */
+    font-size:clamp(40px,6vw,86px);line-height:.95;letter-spacing:-.5px;margin:0 0 28px;
+  }
+  .hero h1 span{display:block}
+  .hero .sub{font-size:19px;max-width:34em;color:var(--mist);margin:0 0 36px}
+  .hero .sub strong{color:var(--bone);font-weight:500}
+  .hero .try{margin:26px 0 0;font-size:15px;color:var(--mist)}
+  .hero .try b{color:var(--bone);font-weight:500}
+  .mark{justify-self:center;width:min(100%,380px)}
+  .mark svg{width:100%;height:auto;display:block}
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;padding:24px 0 72px}
+    .mark{order:-1;width:min(60%,240px);justify-self:start}
+  }
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px}
-  .alt .card{box-shadow:0 1px 3px rgba(16,32,54,.06)}
-  .card .tick{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-  .card h3{font-size:18px;margin-bottom:8px}
-  .card p{font-size:15.5px;color:var(--mut)}
-  .card .q{display:block;margin-top:14px;font-size:13.5px;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 11px;color:var(--navy);font-weight:600}
+  /* sections */
+  section{padding:72px 0;border-top:1px solid var(--line)}
+  h2{
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:700;
+    font-size:clamp(34px,4.5vw,52px);line-height:1;margin:0 0 18px;
+  }
+  .lead{color:var(--mist);max-width:40em;margin:0 0 40px}
 
+  /* three-up panels */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media (max-width:860px){.cards{grid-template-columns:1fr}}
+  .card{padding:26px 28px 28px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+  .card h3{
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:600;font-size:26px;
+    margin:0 0 12px;padding-left:16px;border-left:4px solid var(--lime);line-height:1.1;
+  }
+  .card p{margin:0;color:var(--mist);font-size:16px}
+  .card .q{
+    display:inline-block;margin-top:18px;padding:7px 14px;
+    border:1px solid var(--line);border-radius:999px;background:var(--ground);
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:600;font-size:15px;
+    letter-spacing:.5px;color:var(--mist);
+  }
+
+  /* callout */
+  .callout{
+    margin-top:48px;padding:28px 32px;background:var(--panel);border-radius:8px;
+    border-left:4px solid var(--lime);max-width:52em;
+  }
+  .callout p{margin:0;font-size:19px}
+  .callout p strong{font-weight:500}
+
+  /* numbered steps */
   .steps{counter-reset:step}
   .steps .card{position:relative;padding-top:30px}
-  .steps .card::before{counter-increment:step;content:counter(step);position:absolute;top:-16px;left:22px;width:34px;height:34px;border-radius:50%;background:var(--amber);color:#231a06;font-weight:800;display:flex;align-items:center;justify-content:center;border:3px solid #fff}
+  .steps .card h3{padding-left:0;border-left:0}
+  .steps .card::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;top:-17px;left:26px;width:34px;height:34px;border-radius:50%;
+    background:var(--lime);color:var(--ground);
+    font-family:'Saira Condensed',system-ui,sans-serif;font-weight:700;font-size:19px;
+    display:flex;align-items:center;justify-content:center;border:3px solid var(--ground);
+  }
 
-  .demo-note{display:flex;gap:14px;align-items:flex-start;background:#fff8e8;border:1px solid #efd9a2;border-radius:12px;padding:18px 20px;margin-top:34px;font-size:15.5px}
-  .demo-note .arrow{font-size:22px;line-height:1.2}
+  /* closer */
+  .closer p{color:var(--mist);max-width:38em;margin:0 0 28px;font-size:19px}
 
-  .closer{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;text-align:center}
-  .closer h2{color:#fff}
-  .closer p{color:#c7d5e6;max-width:560px;margin:0 auto 28px}
-
-  footer{padding:34px 0;font-size:14.5px;color:var(--mut);text-align:center}
-  footer a{color:var(--navy)}
-  @media (max-width:640px){ section{padding:44px 0} .hero{padding:56px 0 64px} }
+  footer{
+    padding:36px 0 48px;border-top:1px solid var(--line);color:var(--mist);font-size:14px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  footer a{color:var(--lime)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="logo">Call<span>Catch</span></div>
-    <a class="nav-cta" href="tel:+16163191728">Book a 10-min demo</a>
-  </div>
+<header class="wrap">
+  <nav class="nav">
+    <a class="brand" href="#top" aria-label="CallCatch home">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <circle cx="120" cy="120" r="100" fill="none" stroke="#B8F03A" stroke-width="7"/>
+        <path d="M168 104c0-24-21-42-48-42s-48 18-48 42c0 24 21 42 48 42h10l26 22-6-29c11-8 18-21 18-35z"
+              fill="none" stroke="#E9EEE7" stroke-width="8" stroke-linejoin="round"/>
+        <circle cx="102" cy="106" r="7" fill="#B8F03A"/>
+        <circle cx="128" cy="106" r="7" fill="#B8F03A"/>
+      </svg>
+      <span class="word">CALL<em>CATCH</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="#proof">Why it won't lie</a>
+      <a href="#how">How it works</a>
+      <a href="#start">Get started</a>
+    </div>
+    <a class="btn btn-lime" href="tel:+16163191728">Book a 10-min demo</a>
+  </nav>
 </header>
 
-<div class="hero">
-  <div class="container">
-    <h1>We catch the customers your&nbsp;website loses.</h1>
-    <p class="sub">Half the people who visit your site do it after hours — and leave without calling. CallCatch answers their questions right on your website and turns them into phone numbers on your phone by morning.</p>
-    <a class="btn" href="tel:+16163191728">Book a 10-minute demo</a>
+<main id="top">
+
+<section class="wrap hero">
+  <div>
+    <h1><span>We catch the</span><span>customers your</span><span>website loses.</span></h1>
+    <p class="sub">Half the people who visit your site do it after hours — and leave without calling. <strong>CallCatch answers their questions right on your website and turns them into phone numbers on your phone by morning.</strong></p>
+    <div class="actions">
+      <a class="btn btn-lime" href="tel:+16163191728">Book a 10-minute demo</a>
+      <a class="btn btn-ghost" href="#proof">See why it won't lie</a>
+    </div>
     <p class="try">Or try it yourself right now — <b>the chat button in the corner is live.</b> Ask it what a furnace costs.</p>
   </div>
-</div>
+  <div class="mark" aria-hidden="true">
+    <svg viewBox="0 0 240 240">
+      <circle cx="120" cy="120" r="100" fill="none" stroke="#B8F03A" stroke-width="5"/>
+      <path d="M168 104c0-24-21-42-48-42s-48 18-48 42c0 24 21 42 48 42h10l26 22-6-29c11-8 18-21 18-35z"
+            fill="none" stroke="#E9EEE7" stroke-width="6" stroke-linejoin="round"/>
+      <circle cx="102" cy="106" r="6" fill="#B8F03A"/>
+      <circle cx="128" cy="106" r="6" fill="#B8F03A"/>
+    </svg>
+  </div>
+</section>
 
-<section>
-  <div class="container">
+<section id="proof">
+  <div class="wrap">
     <h2>It only says what your website says. That's the whole point.</h2>
     <p class="lead">Every answer comes from your own pages and the facts you approve — nothing else. Try all three on the widget in the corner — it answers product questions as CallCatch, and plays "Summit Heating &amp; Air," a fictional company, for these tests:</p>
-    <div class="grid">
+    <div class="cards">
       <div class="card">
-        <div class="tick">✓</div>
         <h3>Answers from your site</h3>
         <p>Services, brands, service area, financing — if it's on your website, the assistant knows it and answers in a couple of sentences, any hour of the night.</p>
         <span class="q">"do you install tankless water heaters?"</span>
       </div>
       <div class="card">
-        <div class="tick">✓</div>
         <h3>Never invents a price</h3>
         <p>Ask it what a job costs and it won't guess — it says pricing depends on the job and offers a real quote. No made-up numbers reaching your customers. Ever.</p>
         <span class="q">"how much for a furnace tune-up?"</span>
       </div>
       <div class="card">
-        <div class="tick">✓</div>
         <h3>Turns questions into leads</h3>
         <p>Anything it can't answer becomes a captured name and number — with the customer's request in their own words — emailed to you the second it happens.</p>
         <span class="q">"can someone call me? 616-555-0134"</span>
       </div>
     </div>
-    <div class="demo-note">
-      <div class="arrow">↘</div>
-      <div><b>The demo in the corner is the real product.</b> The second card is the one to test — every other chatbot you've seen will happily make up a price. This one is built so it can't.</div>
+    <div class="callout">
+      <p><strong>The demo in the corner is the real product.</strong> The second card is the one to test — every other chatbot you've seen will happily make up a price. This one is built so it can't.</p>
     </div>
   </div>
 </section>
 
-<section class="alt">
-  <div class="container">
+<section id="how">
+  <div class="wrap">
     <h2>Live on your site in a day. No work on your end.</h2>
     <p class="lead">No forms to fill out, no content to write, no new software to learn.</p>
-    <div class="grid steps">
+    <div class="cards steps">
       <div class="card">
         <h3>We read your website</h3>
         <p>CallCatch learns your services, your service area, and your voice from the pages you already have — plus any facts you want to add, like hours or emergency policy.</p>
@@ -132,19 +243,21 @@
   </div>
 </section>
 
-<section class="closer">
-  <div class="container">
+<section id="start">
+  <div class="wrap closer">
     <h2>Ten minutes. Your actual website. Live.</h2>
     <p>Before we ever talk, we build CallCatch on your real site so you can see it answering questions about your business. If it doesn't impress you, you'll never hear from us again. Simple monthly price, no contract.</p>
-    <a class="btn" href="tel:+16163191728">Call or text (616) 319-1728</a>
+    <div class="actions">
+      <a class="btn btn-lime" href="tel:+16163191728">Call or text (616) 319-1728</a>
+    </div>
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    CallCatch · a product of Astrocode Technologies · Grand Rapids, MI · <a href="mailto:anthony.smith1760@gmail.com">anthony.smith1760@gmail.com</a><br>
-    Built for HVAC, plumbing, and electrical companies in West Michigan.
-  </div>
+</main>
+
+<footer class="wrap">
+  <span>CallCatch · a product of Rogue River Labs · Grand Rapids, MI · <a href="mailto:anthony.smith1760@gmail.com">anthony.smith1760@gmail.com</a></span>
+  <span>Built for HVAC, plumbing, and electrical companies in West Michigan.</span>
 </footer>
 
 <script>
@@ -209,6 +322,7 @@
         data-api="/stub"
         data-name="CallCatch — ask me anything"
         data-greeting="Hi! Ask me about CallCatch — who it's for, how it works — or test me as a customer would: try 'how much for a furnace tune-up?' and watch me refuse to guess."
-        data-color="#12365c"></script>
+        data-theme="dark"
+        data-color="#B8F03A"></script>
 </body>
 </html>

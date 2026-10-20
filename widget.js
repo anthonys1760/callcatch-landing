@@ -9,6 +9,11 @@
  *   data-name="Pro-Tech"           header label
  *   data-greeting="..."            first message shown
  *   data-open="1"                  start open (used by the demo shim)
+ *   data-theme="dark"              dark panel (default light — client sites are light)
+ *   data-accent-ink="#0F1412"      text colour on the accent; override for a pale accent
+ *
+ * On a pale accent (lime, yellow) white text is unreadable — #B8F03A with white
+ * is 1.35:1. data-theme="dark" flips accent text to near-black, which is 14:1.
  *
  * Everything is scoped inside a shadow root so it cannot inherit or leak the
  * host site's CSS. That matters: these are 10-year-old WordPress themes.
@@ -29,6 +34,27 @@
     'Hi! Ask me anything about our services, hours, or pricing — I can also have someone call you back.';
   var startOpen = script.getAttribute('data-open') === '1';
 
+  // Light is the default and must stay byte-identical: client sites are light,
+  // and /demo/:clientId renders the prospect's own homepage around this widget.
+  var dark = script.getAttribute('data-theme') === 'dark';
+  var accentInk = script.getAttribute('data-accent-ink') || (dark ? '#0F1412' : '#fff');
+  // botInk/inputSkin/placeholder stay EMPTY in light so the light CSS is
+  // byte-identical to before this attribute existed — .bot and the input kept
+  // inheriting, and a client page that sets its own text colour still wins.
+  var t = dark
+    ? { panel: '#151B18', logBg: '#0F1412', botBg: '#1B2320', botLine: '#26302B',
+        formBg: '#151B18', formLine: '#26302B', inputLine: '#26302B',
+        dots: '#9AA69F', foot: '#9AA69F',
+        brand: '#6E7B74', brandHover: '#9AA69F',
+        botInk: 'color:#E9EEE7;',
+        inputSkin: 'background:#0F1412;color:#E9EEE7;',
+        placeholder: '.form input::placeholder{color:#6E7B74;}' }
+    : { panel: '#fff', logBg: '#f7f8fa', botBg: '#fff', botLine: '#e3e6ec',
+        formBg: '#fff', formLine: '#e6e8ee', inputLine: '#d5d9e0',
+        dots: '#8b91a0', foot: '#9aa0ac',
+        brand: '#b3b8c2', brandHover: '#7d8494',
+        botInk: '', inputSkin: '', placeholder: '' };
+
   var conversationId = null;
   var busy = false;
 
@@ -41,32 +67,33 @@
     ':host,*{box-sizing:border-box;}',
     '.wrap{font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;',
     '  position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}',
-    '.bubble{background:' + accent + ';color:#fff;border:none;border-radius:999px;padding:13px 20px;',
+    '.bubble{background:' + accent + ';color:' + accentInk + ';border:none;border-radius:999px;padding:13px 20px;',
     '  font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.22);}',
     '.bubble:hover{filter:brightness(1.08);}',
     '.panel{display:none;flex-direction:column;width:360px;max-width:calc(100vw - 32px);height:480px;',
-    '  max-height:calc(100vh - 120px);background:#fff;border-radius:14px;overflow:hidden;',
+    '  max-height:calc(100vh - 120px);background:' + t.panel + ';border-radius:14px;overflow:hidden;',
     '  box-shadow:0 18px 50px rgba(0,0,0,.28);}',
     '.panel.open{display:flex;}',
-    '.head{background:' + accent + ';color:#fff;padding:12px 14px;font-weight:600;',
+    '.head{background:' + accent + ';color:' + accentInk + ';padding:12px 14px;font-weight:600;',
     '  display:flex;justify-content:space-between;align-items:center;}',
-    '.head button{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;}',
-    '.log{flex:1;overflow-y:auto;padding:14px;background:#f7f8fa;display:flex;flex-direction:column;gap:9px;}',
+    '.head button{background:none;border:none;color:' + accentInk + ';font-size:20px;cursor:pointer;line-height:1;}',
+    '.log{flex:1;overflow-y:auto;padding:14px;background:' + t.logBg + ';display:flex;flex-direction:column;gap:9px;}',
     '.msg{max-width:85%;padding:9px 12px;border-radius:13px;white-space:pre-wrap;word-wrap:break-word;}',
-    '.bot{background:#fff;border:1px solid #e3e6ec;align-self:flex-start;border-bottom-left-radius:4px;}',
-    '.me{background:' + accent + ';color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}',
-    '.dots{align-self:flex-start;color:#8b91a0;font-size:13px;padding:4px 12px;}',
-    '.form{display:flex;gap:8px;padding:10px;border-top:1px solid #e6e8ee;background:#fff;}',
+    '.bot{background:' + t.botBg + ';border:1px solid ' + t.botLine + ';' + t.botInk + 'align-self:flex-start;border-bottom-left-radius:4px;}',
+    '.me{background:' + accent + ';color:' + accentInk + ';align-self:flex-end;border-bottom-right-radius:4px;}',
+    '.dots{align-self:flex-start;color:' + t.dots + ';font-size:13px;padding:4px 12px;}',
+    '.form{display:flex;gap:8px;padding:10px;border-top:1px solid ' + t.formLine + ';background:' + t.formBg + ';}',
     // 16px input font is load-bearing: below that, iOS zooms the page on focus.
-    '.form input{flex:1;border:1px solid #d5d9e0;border-radius:9px;padding:10px 11px;font:inherit;font-size:16px;outline:none;}',
+    '.form input{flex:1;border:1px solid ' + t.inputLine + ';border-radius:9px;padding:10px 11px;font:inherit;font-size:16px;outline:none;' + t.inputSkin + '}',
+    t.placeholder,
     '.form input:focus{border-color:' + accent + ';}',
-    '.form button{background:' + accent + ';color:#fff;border:none;border-radius:9px;padding:0 15px;',
+    '.form button{background:' + accent + ';color:' + accentInk + ';border:none;border-radius:9px;padding:0 15px;',
     '  font-weight:600;cursor:pointer;}',
     '.form button:disabled{opacity:.5;cursor:default;}',
-    '.foot{font-size:10.5px;color:#9aa0ac;text-align:center;padding:0 0 7px;background:#fff;}',
-    '.brand{font-size:10px;text-align:center;padding:0 0 8px;background:#fff;letter-spacing:.2px;}',
-    '.brand a{color:#b3b8c2;text-decoration:none;}',
-    '.brand a:hover{color:#7d8494;text-decoration:underline;}',
+    '.foot{font-size:10.5px;color:' + t.foot + ';text-align:center;padding:0 0 7px;background:' + t.panel + ';}',
+    '.brand{font-size:10px;text-align:center;padding:0 0 8px;background:' + t.panel + ';letter-spacing:.2px;}',
+    '.brand a{color:' + t.brand + ';text-decoration:none;}',
+    '.brand a:hover{color:' + t.brandHover + ';text-decoration:underline;}',
     '@media (max-width:480px){',
     '  .wrap{left:12px;right:12px;bottom:12px;align-items:stretch;}',
     '  .panel{width:100%;height:calc(100dvh - 110px);max-height:560px;}',
@@ -80,8 +107,7 @@
     '    <form class="form"><input type="text" placeholder="Type your question..." autocomplete="off">',
     '      <button type="submit">Send</button></form>',
     '    <div class="foot">Answers come from this business’s own information.</div>',
-    // TODO: point at callcatch.com once the domain is registered.
-    '    <div class="brand"><a href="https://anthonys1760.github.io/callcatch-landing/" target="_blank" rel="noopener">Powered by Astrocode Technologies</a></div>',
+    '    <div class="brand"><a href="https://rogueriverlabs.dev/" target="_blank" rel="noopener">Powered by Rogue River Labs</a></div>',
     '  </div>',
     '  <button class="bubble"></button>',
     '</div>',
